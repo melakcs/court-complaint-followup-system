@@ -1,0 +1,79 @@
+﻿@model IEnumerable<CourtCaseApi.ViewModels.ReportVM>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("Home", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="classic-menu-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Case Manager <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="classic-menu-dropdown">@Html.ActionLink("Register Plaintiff", "PIndex", "Home")</li>
+                            <li class="classic-menu-dropdown">@Html.ActionLink("Create Case", "CaseIndex", "Home")</li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Finance Manager <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="classic-menu-dropdown">@Html.ActionLink("Service Payment", "PaymentProcess", "Home")</li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Filing Clerk <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="classic-menu-dropdown">@Html.ActionLink("File Cases", "CaseFile", "Home")</li>
+                            <li class="classic-menu-dropdown">@Html.ActionLink("Schedule", "CaseSchedule", "Home")</li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Judgment Manager <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="classic-menu-dropdown">@Html.ActionLink("Judge cases", "CaseJudge", "Home")</li>
+                        </ul>
+                    </li>
+
+                    <li class="classic-menu-dropdown" style="text-align:right">@Html.ActionLink("Announcement", "Anouncement", "Home")</li>
+                    <li class="classic-menu-dropdown" style="text-align:right">@Html.ActionLink("Report Manager", "ReportManager", "Home")</li>
+                    <li class="classic-menu-dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Account Manager <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li class="classic-menu-dropdown">@Html.ActionLink("User", "UserIndex", "Home")</li>
+                        </ul>
+                    </li>
+                    <li class="classic-menu-dropdown" style="text-align:right">@Html.ActionLink("Logout", "logout", "Home")</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer style="position:fixed; bottom: 0;">
+            <p>&copy; @DateTime.Now.Year - Court Case application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/angularjs")
+    @Scripts.Render("~/bundles/appjs")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,214 @@
+﻿
+@{
+    ViewBag.Title = "Case File";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Case File</h2>
+<script src="~/Scripts/angular.min.js"></script>
+<script src="~/Scripts/angular-datepicker.js"></script>
+<link href="~/Scripts/angular-datepicker.css" rel="stylesheet" />
+<script>
+
+    var app;
+    (function () {
+        'use strict'; //Defines that JavaScript code should be executed in "strict mode" */
+        app = angular.module('CaseFile', ['720kb.datepicker']);
+        app.controller('CaseFile', ['$scope', '$http',
+    function ($scope, $http)
+       {
+        var baseUrl = 'http://localhost:1619/api/CaseFiles';
+        $scope.btnText = "Record";
+           // $scope.email = 'john.doe@gmail.com';
+        //save and update function
+            $scope.SaveUpdate = function () {
+                var CaseFile = {
+                    CaseFileID: $scope.CaseFileID,
+                    FileDate: $scope.FileDate,
+                    JudgmentDate: $scope.JudgmentDate,
+                    CaseID: $scope.CaseID
+            }
+                if (($scope.btnText == "Record") && ($scope.Casefile.$valid)) {
+
+           // if ($scope.btnText == "Save") {
+                    $http.post(baseUrl, CaseFile).then(function (response) {
+                    if (response.data != "") {
+                        alert('Data Saved Successfully');
+                        $scope.GetCaseFiles();
+                        $scope.Clear();
+                    }
+                    else {
+                        alert("Please Enter Valid Information!");
+                    }
+                },
+       function (error) {
+           console.log("There is error " + error);
+       });
+
+            }
+            else {
+                    var apiRoute = baseUrl + '/' + CaseFileID;
+                $http.put(apiRoute, CaseFile).then(function (response) {
+                    if (response.data != "") {
+                        alert("Data Updated Successfully");
+                        $scope.GetCaseFiles();
+                        $scope.Clear();
+
+                    }
+                    else {
+                        alert("Update invalid!");
+                    }
+
+                }, function (error) {
+                    console.log("Error: " + error);
+                });
+                //}
+
+            }
+        }
+
+            $scope.Clear = function () {
+                $scope.CaseFileID = "";
+                $scope.FileDate = "";
+                $scope.JudgmentDate = "";
+                $scope.CaseID = "";
+            }
+
+        //Get all plaintiff
+            $scope.GetCaseFiles = function () {
+            $http.get(baseUrl).then(function (response) {
+                debugger
+                $scope.CaseFiles = response.data;
+            },
+             function (error) {
+                 console.log("Error: " + error);
+             });
+        }
+            $scope.GetCaseFiles();
+
+        //get by ID
+        $scope.GetCaseFile = function (CaseFile) {
+
+            var apiRoute = baseUrl + '/' + CaseFile.CaseFileID;
+            $http.get(apiRoute, CaseFile.CaseFileID).then(function (response) {
+                $scope.CaseFileID = response.data.CaseFileID
+                $scope.FileDate = response.data.FileDate;
+                $scope.JudgmentDate = response.data.JudgmentDate;
+                $scope.CaseID = response.data.CaseID;
+                $scope.btnText = "Update";
+
+
+            },
+            function (error) {
+                console.log("Error: " + error);
+            });
+        }
+
+        //delete function
+        $scope.DeleteCaseFile = function (CaseFile) {
+            debugger
+            var apiRoute = baseUrl + '/' + CaseFile.CaseFileID;
+            $http.delete(apiRoute).then(function (response) {
+                if (response.data != "") {
+                    alert("Data Delete Successfully");
+                    $scope.GetCaseFiles();
+                    $scope.Clear();
+
+                } else {
+                    alert("Some error");
+                }
+
+            }, function (error) {
+                console.log("Error: " + error);
+            });
+        }
+    }]);
+    })();
+</script>
+<body ng-app="CaseFile">
+    <div ng-controller="CaseFile">
+        <form style="width:600px;margin:0px auto;" class="form-horizontal" name="Casefile" novalidate>
+            <div class=" form-horizontal">
+                <label for="CaseFileID" class="control-label col-md-4" style="display:none">CaseFile ID:</label>
+                <div class="form-group row" style="display:none">
+                    <input type="text" class="form-control" id="CaseFileID" data-ng-model="CaseFileID" />
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="FileDate" class="control-label col-md-4">File Date:</label>
+                <div class="form-group row">
+                    <datepicker date-format="yyyy-MM-dd" class="col-md-6">
+                        <input ng-model="FileDate" class="form-control" placeholder="---Choose date---" />
+                    </datepicker>
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="JudgmentDate" class="control-label col-md-4">Judgment Date:</label>
+                <div class="form-group row">
+                    <datepicker date-format="yyyy-MM-dd" class="col-md-6">
+                        <input ng-model="JudgmentDate" class="form-control" placeholder="---Choose date---" />
+                    </datepicker>
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="CaseID" class="control-label col-md-4">Case ID:</label>
+                <div class="form-group row">
+                    @Html.DropDownList("CaseID", (IEnumerable<SelectListItem>)
+                   ViewBag.CaseID, "Please select", new { ng_model = "CaseID", @class = "form-control" })
+                </div>
+            </div>
+            
+            <div class="form-horizontal">
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-7">
+                    <button type="submit" class="btn btn-success margin-right-btn" ng-click="SaveUpdate()">
+                        <i class="icon-save"></i> {{btnText}}
+                    </button>
+                    <input type="reset" id="Clear" value="Reset"  class="btn btn-success margin-right-btn" />
+
+                </div>
+
+            </div>
+            <br />
+        </form>
+        <table border="1" width="1000" style="border-right-color:antiquewhite" class="table">
+            <tr>
+            <thead>
+            <th>File ID</th>
+            <th>File Date</th>
+            <th>Judgment Date</th>
+            <th>Case ID</th>
+          <!--  <th scope="col"> Attachment </th>-->
+
+            </thead>
+            </tr>
+            <tbody ng-repeat="CaseFile in CaseFiles">
+                <tr>
+                    <td>{{CaseFile.CaseFileID}}</td>
+                    <td>{{CaseFile.FileDate}}</td>
+                    <td>{{CaseFile.JudgmentDate}}</td>
+                    <td>{{CaseFile.CaseID}}</td>
+                   <!-- <td>{{CaseFile.Attachment}}</td>-->
+                    <td style="text-align:right; color:white">
+                        <span>
+                            <span id="save" class="btn btn-primary margin-right-btn" ng-click="GetCaseFile(CaseFile)">
+                                Edit
+                            </span>
+                        </span>
+                    </td>
+                    <td style="text-align:right; color:white">
+                        <span>
+                            <span id="save" class="btn btn-danger margin-right-btn" ng-click="DeleteCaseFile(CaseFile)">
+                                Delete
+                            </span>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+
+

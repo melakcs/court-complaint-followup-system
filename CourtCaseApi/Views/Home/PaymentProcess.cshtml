@@ -1,0 +1,210 @@
+﻿
+@{
+    ViewBag.Title = "Payment Process";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Payment Process</h2>
+<script src="~/Scripts/angular.min.js"></script>
+<script src="~/Scripts/angular-datepicker.js"></script>
+<link href="~/Scripts/angular-datepicker.css" rel="stylesheet" />
+<script>
+
+    var app;
+    (function () {
+        'use strict'; 
+        app = angular.module('Finance', ['720kb.datepicker']);
+        app.controller('Finance', ['$scope', '$http',
+        function ($scope, $http) {
+        var baseUrl = 'http://localhost:1619/api/Finances';
+        $scope.btnText = "Checkout";
+
+        //save and update function
+        $scope.SaveUpdate = function () {
+            var Finance = {
+                FinanceID: $scope.FinanceID,
+                ServiceFee: $scope.ServiceFee,
+                PaymentDate: $scope.PaymentDate,
+                CaseID: $scope.CaseID,
+            }
+            if (($scope.btnText == "Checkout") && ($scope.paymentProcess.$valid)) {
+
+         //   if ($scope.btnText == "Checkout") {
+                $http.post(baseUrl, Finance).then(function (response) {
+                    if (response.data != "") {
+                        alert('Data Saved Successfully');
+                        $scope.GetFinances();
+                        $scope.Clear();
+                    }
+                    else {
+                        alert("Please enter valid information!");
+                    }
+                },
+       function (error) {
+           console.log("There is error " + error);
+       });
+
+            }
+            else {
+                var apiRoute = baseUrl + '/' + FinanceID;
+                $http.put(apiRoute, Finance).then(function (response) {
+                    if (response.data != "") {
+                        alert("Data Updated Successfully");
+                        $scope.GetFinances();
+                        $scope.Clear();
+
+                    }
+                    else {
+                        alert("Please enter valid information!");
+                    }
+
+                }, function (error) {
+                    console.log("Error: " + error);
+                });
+                //}
+
+            }
+        }
+
+        $scope.Clear = function () {
+            //$scope.PlaintiffID = 0;
+            $scope.ServiceFee = "";
+            $scope.PaymentDate = "";
+            $scope.CaseID = "";
+        }
+        //Get all plaintiff
+        $scope.GetFinances = function () {
+            $http.get(baseUrl).then(function (response) {
+                debugger
+                $scope.Finances = response.data;
+            },
+             function (error) {
+                 console.log("Error: " + error);
+             });
+        }
+        $scope.GetFinances();
+
+        //get by ID
+        $scope.GetFinance = function (Finance) {
+
+            var apiRoute = baseUrl + '/' + Finance.FinanceID;
+            $http.get(apiRoute, Finance.FinanceID).then(function (response) {
+               $scope.FinanceID = response.data.FinanceID;
+                $scope.ServiceFee = response.data.ServiceFee;
+                $scope.PaymentDate = response.data.PaymentDate;
+                $scope.CaseID = response.data.CaseID;
+                $scope.btnText = "Update";
+            },
+            function (error) {
+                console.log("Error: " + error);
+            });
+        }
+        //GetFinances
+        //delete function
+        $scope.DeleteFinance = function (Finance) {
+            debugger
+            var apiRoute = baseUrl + '/' + Finance.FinanceID;
+            $http.delete(apiRoute).then(function (response) {
+                if (response.data != "") {
+                    alert("Data Delete Successfully");
+                    $scope.GetFinances();
+                    $scope.Clear();
+
+                } else {
+                    alert("Some error");
+                }
+
+            }, function (error) {
+                console.log("Error: " + error);
+            });
+        }
+    }]);
+    })();
+</script>
+<body ng-app="Finance">
+    <div ng-controller="Finance">
+        <form style="width:600px;margin:0px auto;" class="form-horizontal" name="paymentProcess" novalidate >
+            <div class=" form-horizontal">
+                <label for="FinanceID" class="control-label col-md-4" style="display:none">Payment ID:</label>
+                <div class="form-group row" style="display:none">
+                    <input type="text" class="form-control" id="FinanceID" data-ng-model="FinanceID" />
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="ServiceFee" class="control-label col-md-4">Service Fee:</label>
+                <div class="form-group row">
+                    <input type="text" class="form-control" id="ServiceFee" data-ng-model="ServiceFee" data-ng-required="true" />
+
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="PaymentDate" class="control-label col-md-4">Payment Date:</label>
+                <div class="form-group row">
+                    <datepicker date-format="yyyy-MM-dd" class="col-md-6">
+                        <input ng-model="PaymentDate" class="form-control" placeholder="---Choose date---" />
+                    </datepicker>
+                </div>
+            </div>
+
+
+
+            <div class="form-horizontal">
+                <label for="CaseID" class="control-label col-md-4">Case ID:</label>
+                <div class="form-group row">
+                    @Html.DropDownList("CaseID", (IEnumerable<SelectListItem>)
+                   ViewBag.CaseID, "Please select", new { ng_model = "CaseID", @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-7">
+                    <button type="submit" class="btn btn-success margin-right-btn" ng-click="SaveUpdate()">
+                        <i class="icon-save"></i> {{btnText}}
+                    </button>
+                    <input type="reset" id="Clear" value="Reset" class="btn btn-success margin-right-btn" />
+
+                </div>
+
+            </div>
+            <br />
+        </form>
+        <table border="1" width="1000" style="border-right-color:antiquewhite" class="table">
+            <tr>
+            <thead>
+            <th>Finance ID</th>
+            <th>Service Feee</th>
+            <th>Payment Date</th>
+            <th scope="col">Case ID</th>
+
+            </thead>
+            </tr>
+            <tbody ng-repeat="Finance in Finances">
+                <tr>
+                    <td>{{Finance.FinanceID}}</td>
+                    <td>{{Finance.ServiceFee}}</td>
+                    <td>{{Finance.PaymentDate}}</td>
+                    <td>{{Finance.CaseID}}</td>
+                    <td style="text-align:right; color:white">
+                        <span>
+                            <span id="save" class="btn btn-primary margin-right-btn" ng-click="GetFinance(Finance)">
+                                Edit
+                            </span>
+                        </span>
+                    </td>
+                    <td style="text-align:right; color:white">
+                        <span>
+                            <span id="save" class="btn btn-danger margin-right-btn" ng-click="DeleteFinance(Finance)">
+                                Delete
+                            </span>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+
+
+

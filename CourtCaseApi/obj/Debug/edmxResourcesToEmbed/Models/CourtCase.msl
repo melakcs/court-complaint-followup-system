@@ -1,0 +1,115 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="CourtCaseApiContextModelStoreContainer" CdmEntityContainer="CourtCaseApiContextEntities1">
+    <EntitySetMapping Name="C__MigrationHistory">
+      <EntityTypeMapping TypeName="CourtCaseApiContextModel.C__MigrationHistory">
+        <MappingFragment StoreEntitySet="__MigrationHistory">
+          <ScalarProperty Name="MigrationId" ColumnName="MigrationId" />
+          <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
+          <ScalarProperty Name="Model" ColumnName="Model" />
+          <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Anouncements">
+      <EntityTypeMapping TypeName="CourtCaseApiContextModel.Anouncement">
+        <MappingFragment StoreEntitySet="Anouncements">
+          <ScalarProperty Name="AnouncementID" ColumnName="AnouncementID" />
+          <ScalarProperty Name="AnouncementType" ColumnName="AnouncementType" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CaseFiles">
+      <EntityTypeMapping TypeName="CourtCaseApiContextModel.CaseFile">
+        <MappingFragment StoreEntitySet="CaseFiles">
+          <ScalarProperty Name="CaseFileID" ColumnName="CaseFileID" />
+          <ScalarProperty Name="FileDate" ColumnName="FileDate" />
+          <ScalarProperty Name="JudgmentDate" ColumnName="JudgmentDate" />
+          <ScalarProperty Name="CaseID" ColumnName="CaseID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CaseJudges">
+      <EntityTypeMapping TypeName="CourtCaseApiContextModel.CaseJudge">
+        <MappingFragment StoreEntitySet="CaseJudges">
+          <ScalarProperty Name="CaseJudgeID" ColumnName="CaseJudgeID" />
+          <ScalarProperty Name="JudgmentDate" ColumnName="JudgmentDate" />
+          <ScalarProperty Name="CaseStatus" ColumnName="CaseStatus" />
+          <ScalarProperty Name="JudgeDescription" ColumnName="JudgeDescription" />
+          <ScalarProperty Name="CaseID" ColumnName="CaseID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Cases">
+      <EntityTypeMapping TypeName="CourtCaseApiContextModel.Case">
+        <MappingFragment StoreEntitySet="Cases">
+          <ScalarProperty Name="CaseID" ColumnName="CaseID" />
+          <ScalarProperty Name="CaseType" ColumnName="CaseType" />
+          <ScalarProperty Name="CaseCategory" ColumnName="CaseCategory" />
+          <ScalarProperty Name="CaseDescription" ColumnName="CaseDescription" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="PlaintiffID" ColumnName="PlaintiffID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CaseShedules">
+      <EntityTypeMapping TypeName="CourtCaseApiContextModel.CaseShedule">
+        <MappingFragment StoreEntitySet="CaseShedules">
+          <ScalarProperty Name="CaseSheduleID" ColumnName="CaseSheduleID" />
+          <ScalarProperty Name="SheduleType" ColumnName="SheduleType" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
+          <ScalarProperty Name="CaseID" ColumnName="CaseID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Finances">
+      <EntityTypeMapping TypeName="CourtCaseApiContextModel.Finance">
+        <MappingFragment StoreEntitySet="Finances">
+          <ScalarProperty Name="FinanceID" ColumnName="FinanceID" />
+          <ScalarProperty Name="ServiceFee" ColumnName="ServiceFee" />
+          <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
+          <ScalarProperty Name="CaseID" ColumnName="CaseID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Plaintiffs">
+      <EntityTypeMapping TypeName="CourtCaseApiContextModel.Plaintiff">
+        <MappingFragment StoreEntitySet="Plaintiffs">
+          <ScalarProperty Name="PlaintiffID" ColumnName="PlaintiffID" />
+          <ScalarProperty Name="Fname" ColumnName="Fname" />
+          <ScalarProperty Name="Mname" ColumnName="Mname" />
+          <ScalarProperty Name="Lname" ColumnName="Lname" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="Age" ColumnName="Age" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="City" ColumnName="City" />
+          <ScalarProperty Name="SubCity" ColumnName="SubCity" />
+          <ScalarProperty Name="Kebele" ColumnName="Kebele" />
+          <ScalarProperty Name="HouseNumber" ColumnName="HouseNumber" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="CourtCaseApiContextModel.Role">
+        <MappingFragment StoreEntitySet="Roles">
+          <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+          <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="CourtCaseApiContextModel.User">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserType" ColumnName="UserType" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

@@ -1,0 +1,216 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Register plaintiff</h2>
+<script src="~/Scripts/angular.min.js"></script>
+<script>
+    var app;
+    (function () {
+        'use strict'; //Defines that JavaScript code should be executed in "strict mode" */
+        app = angular.module('PlaintiffAdd', []);
+        app.controller('PlaintiffAdd', ['$scope', 'Service',
+    function ($scope, Service) {
+        var baseUrl = 'http://localhost:1619/api/plaintiffs';
+            $scope.SaveUpdate = function () {
+            var plaintif = {
+                Fname: $scope.Fname,
+                Mname: $scope.Mname,
+                Lname: $scope.Lname,
+                Gender: $scope.Gender,
+                Age: $scope.Age,
+                Phone: $scope.Phone,
+                Email: $scope.Email,
+                City: $scope.City,
+                SubCity: $scope.SubCity,
+                Kebele: $scope.Kebele,
+                HouseNumber: $scope.HouseNumber
+            }
+                var apiRoute = baseUrl;
+                var savePlaintiffs = Service.post(apiRoute, plaintif);
+                savePlaintiffs.then(function (response)
+                {
+                     if (response.data != "")
+                    {
+                        alert('Product Added Successfully');
+                        $scope.Clear();
+                    }
+                    else {
+                        alert("Some error");
+                    }
+                },
+            function (error) {
+                console.log("There is error " + error);
+            });
+            
+        }
+        $scope.Clear = function () {
+            $scope.PlaintiffID = 0;
+            $scope.Fname = "";
+            $scope.Lname = "";
+            $scope.Mname = "";
+            $scope.Gender = "";
+            $scope.Age = "";
+            $scope.Phone = "";
+            $scope.Email = "";
+            $scope.City = "";
+            $scope.SubCity = "";
+            $scope.Kebele = "";
+            $scope.HouseNumber = "";
+
+        }
+
+    }]);
+    app.service('Service', function ($http) {
+
+            var urlGet = '';
+            this.post = function (apiRoute, Model) {
+                var request = $http({
+                    method: "post",
+                    url: apiRoute,
+                    data: Model
+                });
+                return request;
+            }
+            this.put = function (apiRoute, Model) {
+                var request = $http({
+                    method: "put",
+                    url: apiRoute,
+                    data: Model
+                });
+                return request;
+            }
+            this.delete = function (apiRoute) {
+                var request = $http({
+                    method: "delete",
+                    url: apiRoute
+                });
+                return request;
+            }
+            this.getAll = function (apiRoute) {
+
+                urlGet = apiRoute;
+                return $http.get(urlGet);
+            }
+
+            this.getbyID = function (apiRoute, PlaintiffID) {
+
+                urlGet = apiRoute + '/' + PlaintiffID;
+                return $http.get(urlGet);
+            }
+        });
+    })();
+
+</script>
+<body ng-app="PlaintiffAdd">
+
+    <div class="container" >
+        <div class="row" ng-controller="PlaintiffAdd">
+            <div class="col-md-2">
+                <!--<p data-ng-hide="addMode"><a data-ng-click="toggleAdd()" href="javascript:;" class="btn btn-primary">Add New</a></p>-->
+                <form  style="width:600px;margin:0px auto;" class="form-horizontal">
+                    <!--<div class=" form-horizontal">
+                        <label for="PlaintiffID" class="control-label col-md-4">Plaintiff ID:</label>
+                        <div class="form-group row">
+                            <input type="text" class="form-control" id="PlaintiffID" data-ng-model="PlaintiffID" required />
+                        </div>
+                    </div>-->
+                        <div class="form-horizontal">
+                        <label for="Fname" class="control-label col-md-4">First Name:</label>
+                        <div class="form-group row">
+                            <input type="text" class="form-control" id="Fname" data-ng-model="Fname" required />
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <label for="Lname" class="control-label col-md-4">Last Name:</label>
+                        <div class="form-group row">
+                            <input type="text" class="form-control" id="Lname" data-ng-model="Lname" required />
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <label for="Mname" class="control-label col-md-4">Middle Name:</label>
+                        <div class="form-group row">
+                            <input type="text" class="form-control" id="Mname" data-ng-model="Mname" required />
+                        </div>
+                    </div>
+
+                    <div class="form-horizontal">
+                        <label for="Gender" class="control-label col-md-4">Gender:</label>
+                        <div class="form-group row">
+                            <input type="text" class="form-control" id="Gender" data-ng-model="Gender" required />
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <label for="Age" class="control-label col-md-4">Age:</label>
+                        <div class="form-group row">
+                            <input type="text" class="form-control" id="Age" data-ng-model="Age" required />
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <label for="Phone" class="control-label col-md-4">Phone:</label>
+                        <div class="form-group row">
+                            <input type="text" class="form-control" id="Phone" data-ng-model="Phone" required />
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <label for="Email" class="control-label col-md-4">Email:</label>
+                        <div class="form-group row">
+                            <input type="text" class="form-control" id="Email" data-ng-model="Email" required />
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <label for="City" class="control-label col-md-4">city:</label>
+                        <div class="form-group row">
+                            <input type="text" class="form-control" id="City" data-ng-model="City" required />
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <label for="SubCity" class="control-label col-md-4">SubCity:</label>
+                        <div class="form-group row">
+                            <input type="text" class="form-control" id="SubCity" data-ng-model="SubCity" required />
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <label for="Kebele" class="control-label col-md-4">Kebele:</label>
+                        <div class="form-group row">
+                            <input type="text" class="form-control" id="Kebele" data-ng-model=" Kebele" required />
+                        </div>
+                    </div>
+                    <div class="form-horizontal">
+                        <label for="HouseNumber" class="control-label col-md-4">HouseNumber:</label>
+                        <div class="form-group row">
+                            <input type="text" class="form-control" id="HouseNumber" data-ng-model="HouseNumber" required />
+                        </div>
+                    </div>
+                      <div class="form-horizontal">
+                        <div class="col-sm-offset-2 col-md-10">
+                            <input  type="submit" id="saveUpdate" value="Add" ng-click="SaveUpdate()"/>
+                            <input type="reset" id="Clear" value="Reset" />
+                            
+                        </div>
+                    </div>
+                    <!--<div class="form-group">
+                        <div class="col-md-4">
+                        </div>
+                        <div class="col-md-7">
+                            <span id="save" class="btn btn-success margin-right-btn" ng-click="SaveUpdate()">
+                                <i class="icon-save"></i> {{btnText}}
+                            </span>
+                        </div>
+                    </div> -->
+                    
+                    <br />
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <br />
+                <br />
+            </div>
+        </div>
+
+        
+    </div>
+</body>

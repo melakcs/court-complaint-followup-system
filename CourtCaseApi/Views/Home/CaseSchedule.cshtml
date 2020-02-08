@@ -1,0 +1,214 @@
+﻿
+@{
+    ViewBag.Title = "CaseSchedule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>CaseSchedule</h2>
+<script src="~/Scripts/angular.min.js"></script>
+<script src="~/Scripts/angular-datepicker.js"></script>
+<link href="~/Scripts/angular-datepicker.css" rel="stylesheet" />
+<script>
+    var app;
+    (function () {
+        'use strict'; //Defines that JavaScript code should be executed in "strict mode" */
+        app = angular.module('CaseSchedule', ['720kb.datepicker']);
+        app.controller('CaseSchedule', ['$scope', '$http',
+    function ($scope, $http) {
+        var baseUrl = 'http://localhost:1619/api/CaseShedules';
+        $scope.btnText = "Create";
+
+        //save and update function
+        $scope.SaveUpdate = function () {
+            var CaseShedule = {
+                CaseSheduleID: $scope.CaseSheduleID,
+                SheduleType: $scope.SheduleType,
+                Date: $scope.Date,
+                CaseID: $scope.CaseID
+            }
+            if (($scope.btnText == "Create") && ($scope.CaseShedule.$valid)) {
+
+          // if ($scope.btnText == "Create") {
+                // var apiRoute = baseUrl;
+
+                $http.post(baseUrl, CaseShedule).then(function (response) {
+                    if (response.data != "") {
+                        alert('Data Saved Successfully');
+                        $scope.GetCaseShedules();
+                        $scope.Clear();
+                    }
+                    else {
+                        alert("Some error");
+                    }
+                },
+       function (error) {
+           console.log("There is error " + error);
+       });
+
+            }
+            else {
+                var apiRoute = baseUrl + '/' + CaseSheduleID;
+                $http.put(apiRoute, CaseShedule).then(function (response) {
+                    if (response.data != "") {
+                        alert("Data Updated Successfully");
+                        $scope.GetCaseShedules();
+                        $scope.Clear();
+
+                    }
+                    else {
+                        alert("Some error");
+                    }
+
+                }, function (error) {
+                    console.log("Error: " + error);
+                });
+                //}
+
+            }
+        }
+
+        $scope.Clear = function () {
+            $scope.CaseSheduleID = "";
+            $scope.SheduleType = "";
+            $scope.Date = "";
+            $scope.CaseID = "";
+        }
+        //Get all finances
+        $scope.GetCaseShedules = function () {
+            $http.get(baseUrl).then(function (response) {
+                debugger
+                $scope.CaseShedules = response.data;
+            },
+             function (error) {
+                 console.log("Error: " + error);
+             });
+        }
+        $scope.GetCaseShedules();
+
+        //get by ID
+        $scope.GetCaseShedule = function (CaseShedule) {
+            debugger
+            var apiRoute = baseUrl + '/' + CaseShedule.CaseSheduleID;
+            $http.get(apiRoute, CaseShedule.CaseSheduleID).then(function (response) {
+                $scope.SheduleType = response.data.SheduleType;
+                $scope.Date = response.data.Date;
+                $scope.CaseID = response.data.CaseID;
+                $scope.btnText = "Update";
+
+            },
+            function (error) {
+                console.log("Error: " + error);
+            });
+        }
+
+        //delete function
+        $scope.DeleteCaseShedule = function (CaseShedule) {
+            debugger
+            var apiRoute = baseUrl + '/' + CaseShedule.CaseSheduleID;
+            $http.delete(apiRoute).then(function (response) {
+                if (response.data != "") {
+                    alert("Data Delete Successfully");
+                    $scope.GetCaseShedules();
+                    $scope.Clear();
+
+                } else {
+                    alert("Some error");
+                }
+
+            }, function (error) {
+                console.log("Error: " + error);
+            });
+        }
+    }]);
+    })();
+</script>
+
+<body ng-app="CaseSchedule">
+    <div ng-controller="CaseSchedule">
+        <form style="width:600px;margin:0px auto;" class="form-horizontal" name="CaseShedule" novalidate>
+            <div class=" form-horizontal">
+                <label for="CaseSheduleID" class="control-label col-md-4" style="display:none">CaseSheduleID:</label>
+                <div class="form-group row" style="display:none">
+                    <input type="text" class="form-control" id="CaseSheduleID" data-ng-model="CaseSheduleID" />
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="FileDate" class="control-label col-md-4">Shedule Type:</label>
+                <div class="form-group row">
+                    <fieldset>
+                        <select type="text" class="form-control" id="SheduleType" data-ng-model="SheduleType" data-ng-required="true">
+                            <option value="">--Please Select</option>
+                            <option value="New">New</option>
+                            <option value="Extending">Extending</option>
+                        </select>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="Date" class="control-label col-md-4">Date:</label>
+                <div class="form-group row">
+                    <datepicker date-format="yyyy-MM-dd" class="col-md-6">
+                        <input ng-model="Date" class="form-control" placeholder="---Choose date---" />
+                    </datepicker>
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="CaseID" class="control-label col-md-4">Case ID:</label>
+                <div class="form-group row">
+                    @Html.DropDownList("CaseID", (IEnumerable<SelectListItem>)
+                   ViewBag.CaseID, "Please select", new { ng_model = "CaseID", @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-7">
+                    <button type="submit" class="btn btn-success margin-right-btn" ng-click="SaveUpdate()">
+                        <i class="icon-save"></i> {{btnText}}
+                    </button>
+                    <input type="reset" id="Clear" value="Reset" class="btn btn-success margin-right-btn"/>
+
+                </div>
+
+            </div>
+            <br />
+        </form>
+        <table border="1" width="1000" style="border-right-color:antiquewhite" class="table">
+            <tr>
+            <thead>
+            <th>File ID</th>
+            <th>File Date</th>
+            <th>Judgment Date</th>
+            <th scope="col">Case ID</th>
+
+            </thead>
+            </tr>
+            <tbody ng-repeat="CaseShedule in CaseShedules">
+                <tr>
+                    <td>{{CaseShedule.CaseSheduleID}}</td>
+                    <td>{{CaseShedule.SheduleType}}</td>
+                    <td>{{CaseShedule.Date}}</td>
+                    <td>{{CaseShedule.CaseID}}</td>
+                    <td style="text-align:right; color:white">
+                        <span>
+                            <span id="save" class="btn btn-primary margin-right-btn" ng-click="GetCaseShedule(CaseShedule)">
+                                Edit
+                            </span>
+                        </span>
+                    </td>
+                    <td style="text-align:right; color:white">
+                        <span>
+                            <span id="save" class="btn btn-danger margin-right-btn" ng-click="DeleteCaseShedule(CaseShedule)">
+                                Delete
+                            </span>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+
+
+

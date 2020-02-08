@@ -1,0 +1,227 @@
+﻿
+@{
+    ViewBag.Title = "CaseJudge";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>CaseJudge</h2>
+<script src="~/Scripts/angular.min.js"></script>
+<script src="~/Scripts/angular-datepicker.js"></script>
+<link href="~/Scripts/angular-datepicker.css" rel="stylesheet" />
+<script>
+    var app;
+    (function () {
+        'use strict'; 
+        app = angular.module('CaseJudge', ['720kb.datepicker']);
+        app.controller('CaseJudge', ['$scope', '$http',
+    function ($scope, $http) {
+        var baseUrl = 'http://localhost:1619/api/CaseJudges';
+        $scope.btnText = "Submit";
+
+
+        //save and update function
+        $scope.SaveUpdate = function () {
+            var CaseJudge = {
+
+                CaseJudgeID: $scope.CaseJudgeID,
+                JudgmentDate: $scope.JudgmentDate,
+                CaseStatus: $scope.CaseStatus,
+                JudgeDescription: $scope.JudgeDescription,
+                CaseID: $scope.CaseID
+            }
+            if ($scope.btnText == "Submit") {
+                   $http.post(baseUrl, CaseJudge).then(function (response) {
+                    if (response.data != "") {
+                        alert('Data Saved Successfully');
+                        $scope.GetCaseJudges();
+                        $scope.Clear();
+                    }
+                    else {
+                        alert("Some error");
+                    }
+                },
+       function (error) {
+           console.log("There is error " + error);
+       });
+
+            }
+            else {
+                var apiRoute = baseUrl + '/' + CaseJudgeID;
+                $http.put(apiRoute, CaseJudge).then(function (response) {
+                    if (response.data != "") {
+                        alert("Data Updated Successfully");
+                        $scope.GetCaseJudges();
+                        $scope.Clear();
+
+                    }
+                    else {
+                        alert("Some error");
+                    }
+
+                }, function (error) {
+                    console.log("Error: " + error);
+                });
+                //}
+
+            }
+        }
+
+        $scope.Clear = function () {
+            $scope.CaseJudgeID = "";
+            $scope.JudgmentDate = "";
+            $scope.CaseStatus = "";
+            $scope.JudgeDescription = "";
+            $scope.CaseID = "";
+        }
+        //Get all finances
+        $scope.GetCaseJudges = function () {
+            $http.get(baseUrl).then(function (response) {
+                debugger
+                $scope.CaseJudges = response.data;
+            },
+             function (error) {
+                 console.log("Error: " + error);
+             });
+        }
+        $scope.GetCaseJudges();
+
+        //get by ID
+        $scope.GetCaseJudge = function (CaseJudge) {
+            debugger
+            var apiRoute = baseUrl + '/' + CaseJudge.CaseJudgeID;
+            $http.get(apiRoute, CaseJudge.CaseJudgeID).then(function (response) {
+                $scope.CaseJudgeID = response.data.CaseJudgeID;
+                $scope.JudgmentDate = response.data.JudgmentDate;
+                $scope.CaseStatus = response.data.CaseStatus;
+                $scope.JudgeDescription = response.data.JudgeDescription;
+                $scope.CaseID = response.data.CaseID;
+                $scope.btnText = "Update";
+
+            },
+            function (error) {
+                console.log("Error: " + error);
+            });
+        }
+
+        //delete function
+        $scope.DeleteCaseJudge = function (CaseJudge) {
+            debugger
+            var apiRoute = baseUrl + '/' + CaseJudge.CaseJudgeID;
+            $http.delete(apiRoute).then(function (response) {
+                if (response.data != "") {
+                    alert("Data Delete Successfully");
+                    $scope.GetCaseJudges();
+                    $scope.Clear();
+
+                } else {
+                    alert("Some error");
+                }
+
+            }, function (error) {
+                console.log("Error: " + error);
+            });
+        }
+    }]);
+    })();
+</script>
+
+<body ng-app="CaseJudge">
+    <div ng-controller="CaseJudge">
+        <form style="width:600px;margin:0px auto;" class="form-horizontal" novalidate>
+            <div class=" form-horizontal">
+                <label for="CaseJudgeID " class="control-label col-md-4" style="display:none">CaseJudge_ID :</label>
+                <div class="form-group row" style="display:none">
+                    <input type="text" class="form-control" id="CaseJudgeID" data-ng-model="CaseJudgeID" />
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="CaseID" class="control-label col-md-4">Case ID:</label>
+                <div class="form-group row">
+                    @Html.DropDownList("CaseID", (IEnumerable<SelectListItem>)
+                   ViewBag.CaseID, "Please select", new { ng_model = "CaseID", @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="JudgmentDate " class="control-label col-md-4">Judgment Date :</label>
+                <div class="form-group row">
+                    <datepicker date-format="yyyy-MM-dd" class="col-md-6">
+                        <input ng-model="JudgmentDate " class="form-control" placeholder="---Choose date---" />
+                    </datepicker>
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="CaseStatus " class="control-label col-md-4">Case Status :</label>
+                <div class="form-group row">
+                    <fieldset>
+                        <select type="text" class="form-control" id="CaseStatus " data-ng-model="CaseStatus " data-ng-required="true">
+                            <option value="">--Please Select</option>
+                            <option value="Closed">Closed</option>
+                            <option value="Extended">Extended</option>
+                        </select>
+                    </fieldset>
+                </div>
+                <div class="form-horizontal">
+                    <label for="CaseDescription" class="control-label col-md-4">JudgeDescription:</label>
+                    <div class="form-group row">
+                        <textarea class="form-control" id="JudgeDescription" data-ng-model="JudgeDescription"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-7">
+                    <button type="submit" class="btn btn-success margin-right-btn" ng-click="SaveUpdate()">
+                        <i class="icon-save"></i> {{btnText}}
+                    </button>
+                    <input type="reset" id="Clear" value="Reset" class="btn btn-success margin-right-btn" />
+
+                </div>
+
+            </div>
+            <br />
+        </form>
+        <table border="1" width="1000" style="border-right-color:antiquewhite" class="table">
+            <tr>
+            <thead>
+            <th>CaseJudgeID</th>
+            <th>Case ID</th>
+            <th>CaseStatus</th>
+            <th>Judgment Date</th>
+            <th scope="col">JudgeDescription</th>
+
+
+            </thead>
+            </tr>
+            <tbody ng-repeat="CaseJudge in CaseJudges">
+                <tr>
+                    <td>{{CaseJudge.CaseJudgeID }}</td>
+                    <td>{{CaseJudge.CaseID}}</td>
+                    <td>{{CaseJudge.CaseStatus }}</td>
+                    <td>{{CaseJudge.JudgmentDate }}</td>
+                    <td>{{CaseJudge.JudgeDescription }}</td>
+
+                    <td style="text-align:right; color:white">
+                        <span>
+                            <span id="save" class="btn btn-primary margin-right-btn" ng-click="GetCaseJudge(CaseJudge)">
+                                Edit
+                            </span>
+                        </span>
+                    </td>
+                    <td style="text-align:right; color:white">
+                        <span>
+                            <span id="save" class="btn btn-danger margin-right-btn" ng-click="DeleteCaseJudge(CaseJudge)">
+                                Delete
+                            </span>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+
+
+
+
+

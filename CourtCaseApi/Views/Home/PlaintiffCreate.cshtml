@@ -1,0 +1,264 @@
+﻿
+@{
+    ViewBag.Title = "PlaintiffCreate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Plaintiff Create</h2>
+<script src="~/Scripts/angular.min.js"></script>
+<script>
+    var app;
+    (function () {
+        'use strict';
+        app = angular.module('PlaintiffAdd', []);
+        app.controller('PlaintiffAdd', ['$scope', '$http',
+    function ($scope, $http) {
+        var baseUrl = 'http://localhost:1619/api/plaintiffs';
+        $scope.btnText = "Save";
+        $scope.Email = 'john.doe@gmail.com';
+
+        //save and update function
+        $scope.SaveUpdate = function () {
+            var Plaintiff =
+                {
+                    PlaintiffID: $scope.PlaintiffID,
+                    Fname: $scope.Fname,
+                    Mname: $scope.Mname,
+                    Lname: $scope.Lname,
+                    Gender: $scope.Gender,
+                    Age: $scope.Age,
+                    Phone: $scope.Phone,
+                    Email: $scope.Email,
+                    City: $scope.City,
+                    SubCity: $scope.SubCity,
+                    Kebele: $scope.Kebele,
+                    HouseNumber: $scope.HouseNumber
+                }
+            if ($scope.btnText == "Save") {
+                $http.post(baseUrl, Plaintiff).then(function (response) {
+                    if (response.data != "") {
+                        alert('Data Saved Successfully');
+                        $scope.GetPlaintiffs();
+                        $scope.Clear();
+                    }
+                    else {
+                        alert("Some error");
+                    }
+                }
+
+           ,
+       function (error) {
+           console.log("There is error " + error);
+       });
+
+            }
+            else {
+                var apiRoute = baseUrl + '/' + PlaintiffID;
+                $http.put(apiRoute, Plaintiff).then(function (response) {
+                    if (response.data != "") {
+                        alert("Data Updated Successfully");
+                        $scope.GetPlaintiffs();
+                        $scope.Clear();
+
+                    }
+                    else {
+                        alert("Some error");
+                    }
+
+                }, function (error) {
+                    console.log("Error: " + error);
+                });
+                //}
+
+            }
+        }
+
+        $scope.Clear = function () {
+            //$scope.PlaintiffID = 0;
+            $scope.Fname = "";
+            $scope.Lname = "";
+            $scope.Mname = "";
+            $scope.Gender = "";
+            $scope.Age = "";
+            $scope.Phone = "";
+            $scope.Email = "";
+            $scope.City = "";
+            $scope.SubCity = "";
+            $scope.Kebele = "";
+            $scope.HouseNumber = "";
+
+        }
+        //Get all plaintiff
+        $scope.GetPlaintiffs = function () {
+            $http.get(baseUrl).then(function (response) {
+                debugger
+                $scope.Plaintiffs = response.data;
+
+            },
+             function (error) {
+                 console.log("Error: " + error);
+             });
+
+
+        }
+        $scope.GetPlaintiffs();
+
+        //get plaintiff by ID
+        $scope.GetPlaintiff = function (Plaintiff) {
+            debugger
+            var apiRoute = baseUrl + '/' + Plaintiff.PlaintiffID;
+            $http.get(apiRoute, Plaintiff.PlaintiffID).then(function (response) {
+                $scope.PlaintiffID = response.data.PlaintiffID;
+                $scope.Fname = response.data.Fname;
+                $scope.Mname = response.data.Mname;
+                $scope.Lname = response.data.Lname;
+                $scope.Gender = response.data.Gender;
+                $scope.Age = response.data.Age;
+                $scope.Phone = response.data.Phone;
+                $scope.Email = response.data.Email;
+                $scope.City = response.data.City;
+                $scope.SubCity = response.data.SubCity;
+                $scope.Kebele = response.data.Kebele;
+                $scope.HouseNumber = response.data.HouseNumber;
+                $scope.btnText = "Update";
+            },
+            function (error) {
+                console.log("Error: " + error);
+            });
+        }
+
+        //delete function
+        $scope.DeletePlaintiff = function (Plaintiff) {
+            debugger
+            var apiRoute = baseUrl + '/' + Plaintiff.PlaintiffID;
+            $http.delete(apiRoute).then(function (response) {
+                if (response.data != "") {
+                    alert("Data Delete Successfully");
+                    $scope.GetPlaintiffs();
+                    $scope.Clear();
+
+                } else {
+                    alert("Some error");
+                }
+
+            }, function (error) {
+                console.log("Error: " + error);
+            });
+        }
+
+    }]);
+    })();
+
+</script>
+
+<body ng-app="PlaintiffAdd">
+
+    <div ng-controller="PlaintiffAdd">
+        <form style="width:600px;margin:0px auto;" class="form-horizontal" name="PlaintiffAddform" ng-init="SaveUpdate={},PlaintiffAddform=''">
+            <div class=" form-horizontal">
+                <label for="PlaintiffID" class="control-label col-md-4" style="display:none">Plaintiff ID:</label>
+                <div class="form-group row" style="display:none">
+                    <input type="text" class="form-control" id="PlaintiffID" data-ng-model="PlaintiffID" />
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="Fname" class="control-label col-md-4">First Name:</label>
+                <div class="form-group row">
+                    <input type="text" class="form-control" id="Fname" data-ng-model="Fname" data-ng-required="true" />
+
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="Lname" class="control-label col-md-4">Last Name:</label>
+                <div class="form-group row">
+                    <input type="text" class="form-control" id="Lname" data-ng-model="Lname" data-ng-required="true" />
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="Mname" class="control-label col-md-4">Middle Name:</label>
+                <div class="form-group row">
+                    <input type="text" class="form-control" id="Mname" data-ng-model="Mname" data-ng-required="true" />
+                </div>
+            </div>
+
+            <div class="form-horizontal">
+                <label for="Gender" class="control-label col-md-4">Gender:</label>
+                <div class="form-group row">
+                    <fieldset>
+                        <select type="text" class="form-control" id="Gender" data-ng-model="Gender" data-ng-required="true">
+                            <option value="">--Please Select</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                        </select>
+                    </fieldset>
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="Age" class="control-label col-md-4">Age:</label>
+                <div class="form-group row">
+                    <input type="text" class="form-control" id="Age" data-ng-model="Age" data-ng-required="true" />
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="Phone" class="control-label col-md-4">Phone:</label>
+                <div class="form-group row">
+                    <input type="text" class="form-control" id="Phone" data-ng-model="Phone" data-ng-required="true" />
+                </div>
+            </div>
+            <p>
+                <div class="form-horizontal">
+                    <label for="Email" class="control-label col-md-4">Email:</label>
+                    <div class="form-group row">
+                        <input type="email" class="form-control" name="Email" data-ng-model="Email" required/>
+                        <span style="color:red" ng-show="Plaintifform.Email.$dirty && Plaintifform.Email.$invalid">
+                            <span ng-show="Plaintifform.Email.$error.required">Email is required.</span>
+                            <span ng-show="Plaintifform.Email.$error.email">Invalid email address.</span>
+                        </span>
+                    </div>
+                </div>
+            </p>
+            <div class="form-horizontal">
+                <label for="City" class="control-label col-md-4">city:</label>
+                <div class="form-group row">
+                    <input type="text" class="form-control" id="City" data-ng-model="City" data-ng-required="true" />
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="SubCity" class="control-label col-md-4">SubCity:</label>
+                <div class="form-group row">
+                    <input type="text" class="form-control" id="SubCity" data-ng-model="SubCity" data-ng-required="true" />
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="Kebele" class="control-label col-md-4">Kebele:</label>
+                <div class="form-group row">
+                    <input type="text" class="form-control" id="Kebele" data-ng-model="Kebele" data-ng-required="true" />
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="HouseNumber" class="control-label col-md-4">HouseNumber:</label>
+                <div class="form-group row">
+                    <input type="text" class="form-control" id="HouseNumber" data-ng-model="HouseNumber" data-ng-required="true" />
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-7">
+                    <button type="submit" ng-disabled="Plaintifform.Email.$dirty && Plaintifform.Email.$invalid"
+                            class=" btn btn-success margin-right-btn" ng-click="SaveUpdate()">
+                        <i class="icon-save"></i> {{btnText}}
+                    </button>
+                    <input type="reset" id="Clear" value="Reset" class="btn btn-success margin-right-btn" />
+                </div>
+            </div>
+            <br />
+        </form>
+        <div class="actions">
+            <a href="@Url.Action("PIndex", "Home")" class="btn green" btn-success=""
+               data-buttontype="btn_new_record"><i class="fa fa-plus"></i>Back to list</a>
+        </div>
+    </div>
+</body>
+
+

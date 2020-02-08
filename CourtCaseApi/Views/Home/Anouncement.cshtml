@@ -1,0 +1,219 @@
+﻿
+@{
+    ViewBag.Title = "Anouncement";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<h2>Anouncement</h2>
+<script src="~/Scripts/angular.min.js"></script>
+<script src="~/Scripts/angular-datepicker.js"></script>
+<link href="~/Scripts/angular-datepicker.css" rel="stylesheet" />
+<script>
+    var app;
+    (function () {
+        'use strict'; 
+        app = angular.module('Announcement', ['720kb.datepicker']);
+        app.controller('Announcement', ['$scope', '$http',
+    function ($scope, $http) {
+        var baseUrl = 'http://localhost:1619/api/Anouncements';
+        $scope.btnText = "Submit";
+
+        //save and update function
+        $scope.SaveUpdate = function () {
+            var anouncement = {
+
+                AnouncementID: $scope.AnouncementID,
+                AnouncementType: $scope.AnouncementType,
+                Date: $scope.Date,
+                Description: $scope.Description,
+                //CaseID: $scope.CaseID
+            }
+            //            
+            if (($scope.btnText == "Submit") && ($scope.Announcement.$valid)) {
+
+            //if ($scope.btnText == "Submit") {
+                // var apiRoute = baseUrl;
+
+                $http.post(baseUrl, anouncement).then(function (response) {
+                    if (response.data != "") {
+                        alert('Data Saved Successfully');
+                        $scope.GetAnouncements();
+                        $scope.Clear();
+                    }
+                    else {
+                        alert("Some error");
+                    }
+                },
+       function (error) {
+           console.log("There is error " + error);
+       });
+
+            }
+            else {
+                var apiRoute = baseUrl + '/' + AnouncementID;
+                $http.put(apiRoute, anouncement).then(function (response) {
+                    if (response.data != "") {
+                        alert("Data Updated Successfully");
+                        $scope.GetAnouncements();
+                        $scope.Clear();
+
+                    }
+                    else {
+                        alert("Some error");
+                    }
+
+                }, function (error) {
+                    console.log("Error: " + error);
+                });
+                //}
+
+            }
+        }
+
+        $scope.Clear = function () {
+            $scope.AnouncementType = "";
+            $scope.Date = "";
+            $scope.Description = "";
+
+        }
+        //Get all finances
+        $scope.GetAnouncements = function () {
+            $http.get(baseUrl).then(function (response) {
+                debugger
+                $scope.Anouncements = response.data;
+            },
+             function (error) {
+                 console.log("Error: " + error);
+             });
+        }
+        $scope.GetAnouncements();
+
+        //get by ID
+        $scope.GetAnouncement = function (anouncement) {
+            debugger
+            var apiRoute = baseUrl + '/' + anouncement.AnouncementID;
+            $http.get(apiRoute, anouncement.AnouncementID).then(function (response) {
+                $scope.AnouncementID = response.data.AnouncementID;
+                $scope.AnouncementType = response.data.AnouncementType;
+                $scope.Date = response.data.Date;
+                $scope.Description = response.data.Description;
+                $scope.btnText = "Update";
+
+            },
+            function (error) {
+                console.log("Error: " + error);
+            });
+        }
+
+        //delete function
+        $scope.DeleteAnouncement = function (anouncement) {
+            debugger
+            var apiRoute = baseUrl + '/' + anouncement.AnouncementID;
+            $http.delete(apiRoute).then(function (response) {
+                if (response.data != "") {
+                    alert("Data Delete Successfully");
+                    $scope.GetAnouncements();
+                    $scope.Clear();
+
+                } else {
+                    alert("Some error");
+                }
+
+            }, function (error) {
+                console.log("Error: " + error);
+            });
+        }
+    }]);
+    })();
+</script>
+<body ng-app="Announcement">
+    <div ng-controller="Announcement">
+        <form style="width:600px;margin:0px auto;" class="form-horizontal" name="Announcement" novalidate>
+            <div class=" form-horizontal">
+                <label for="AnouncementID  " class="control-label col-md-4" style="display:none">Anouncement ID :</label>
+                <div class="form-group row" style="display:none">
+                    <input type="text" class="form-control" id="AnouncementID  " data-ng-model="AnouncementID  " />
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="AnouncementType " class="control-label col-md-4">Anouncement Type :</label>
+                <div class="form-group row">
+                    <fieldset>
+                        <select type="text" class="form-control" id="AnouncementType" data-ng-model="AnouncementType " data-ng-required="true">
+                            <option value="">--Please Select</option>
+                            <option value="News">News</option>
+                            <option value="About Work">About Work</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="form-horizontal">
+                <label for="Date" class="control-label col-md-4">Date:</label>
+                <div class="form-group row">
+                    <datepicker date-format="yyyy-MM-dd" class="col-md-6">
+                        <input ng-model="Date" class="form-control" placeholder="---Choose date---" data-ng-required="true" />
+                    </datepicker>
+                </div>
+            </div>
+
+            <div class="form-horizontal">
+                <label for="Description " class="control-label col-md-4">Description:</label>
+                <div class="form-group row">
+                    <div class="form-group row">
+                        <textarea class="form-control" type="text" id="Description " data-ng-model="Description " data-ng-required="true"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-7">
+                    <button type="submit" class="btn btn-success margin-right-btn" ng-click="SaveUpdate()">
+                        <i class="icon-save"></i> {{btnText}}
+                    </button>
+                    <input type="reset" id="Clear" value="Reset" class="btn btn-success margin-right-btn" />
+
+                </div>
+
+            </div>
+        </form>
+        <br />
+
+        <table border="1" width="1000" style="border-right-color:antiquewhite" class="table">
+            <tr>
+            <thead>
+            <th>Anouncement ID </th>
+            <th>Anouncement Type </th>
+            <th>Date</th>
+            <th scope="col">Description </th>
+            </thead>
+            </tr>
+            <tbody ng-repeat="Anouncement in Anouncements">
+                <tr>
+                    <td>{{Anouncement.AnouncementID }}</td>
+                    <td>{{Anouncement.AnouncementType }}</td>
+                    <td>{{Anouncement.Date}}</td>
+                    <td>{{Anouncement.Description }}</td>
+                    <td style="text-align:right; color:white">
+                        <span>
+                            <span id="save" class="btn btn-primary margin-right-btn" ng-click="GetAnouncement(Anouncement)">
+                                Edit
+                            </span>
+                        </span>
+                    </td>
+                    <td style="text-align:right; color:white">
+                        <span>
+                            <span id="save" class="btn btn-danger margin-right-btn" ng-click="DeleteAnouncement(Anouncement)">
+                                Delete
+                            </span>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+
+

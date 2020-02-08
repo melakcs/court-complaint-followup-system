@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="CourtCaseApiContextModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="__MigrationHistory">
+    <Key>
+      <PropertyRef Name="MigrationId" />
+      <PropertyRef Name="ContextKey" />
+    </Key>
+    <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+    <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
+    <Property Name="Model" Type="varbinary(max)" Nullable="false" />
+    <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Anouncements">
+    <Key>
+      <PropertyRef Name="AnouncementID" />
+    </Key>
+    <Property Name="AnouncementID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AnouncementType" Type="nvarchar(max)" />
+    <Property Name="Date" Type="nvarchar(max)" />
+    <Property Name="Description" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="CaseFiles">
+    <Key>
+      <PropertyRef Name="CaseFileID" />
+    </Key>
+    <Property Name="CaseFileID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FileDate" Type="nvarchar(max)" />
+    <Property Name="JudgmentDate" Type="nvarchar(max)" />
+    <Property Name="CaseID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CaseJudges">
+    <Key>
+      <PropertyRef Name="CaseJudgeID" />
+    </Key>
+    <Property Name="CaseJudgeID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="JudgmentDate" Type="nvarchar(max)" />
+    <Property Name="CaseStatus" Type="nvarchar(max)" />
+    <Property Name="CaseID" Type="int" Nullable="false" />
+    <Property Name="JudgeDescription" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="Cases">
+    <Key>
+      <PropertyRef Name="CaseID" />
+    </Key>
+    <Property Name="CaseID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CaseType" Type="nvarchar(max)" />
+    <Property Name="CaseCategory" Type="nvarchar(max)" />
+    <Property Name="CaseDescription" Type="nvarchar(max)" />
+    <Property Name="Date" Type="nvarchar(max)" />
+    <Property Name="PlaintiffID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CaseShedules">
+    <Key>
+      <PropertyRef Name="CaseSheduleID" />
+    </Key>
+    <Property Name="CaseSheduleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SheduleType" Type="nvarchar(max)" />
+    <Property Name="Date" Type="nvarchar(max)" />
+    <Property Name="CaseID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Finances">
+    <Key>
+      <PropertyRef Name="FinanceID" />
+    </Key>
+    <Property Name="FinanceID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ServiceFee" Type="decimal" Precision="18" Scale="2" Nullable="false" />
+    <Property Name="PaymentDate" Type="nvarchar(max)" />
+    <Property Name="CaseID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Plaintiffs">
+    <Key>
+      <PropertyRef Name="PlaintiffID" />
+    </Key>
+    <Property Name="PlaintiffID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Fname" Type="nvarchar(max)" />
+    <Property Name="Mname" Type="nvarchar(max)" />
+    <Property Name="Lname" Type="nvarchar(max)" />
+    <Property Name="Gender" Type="nvarchar(max)" />
+    <Property Name="Age" Type="int" Nullable="false" />
+    <Property Name="Phone" Type="int" Nullable="false" />
+    <Property Name="Email" Type="nvarchar(max)" />
+    <Property Name="City" Type="nvarchar(max)" />
+    <Property Name="SubCity" Type="nvarchar(max)" />
+    <Property Name="Kebele" Type="nvarchar(max)" />
+    <Property Name="HouseNumber" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Roles">
+    <Key>
+      <PropertyRef Name="RoleID" />
+    </Key>
+    <Property Name="RoleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RoleName" Type="nvarchar(max)" />
+    <Property Name="UserID" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar(max)" />
+    <Property Name="Password" Type="nvarchar(max)" />
+    <Property Name="UserType" Type="nchar" MaxLength="10" />
+  </EntityType>
+  <Association Name="FK_dbo_CaseFiles_dbo_Cases_CaseID">
+    <End Role="Cases" Type="Self.Cases" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="CaseFiles" Type="Self.CaseFiles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cases">
+        <PropertyRef Name="CaseID" />
+      </Principal>
+      <Dependent Role="CaseFiles">
+        <PropertyRef Name="CaseID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_CaseJudges_dbo_Cases_CaseID">
+    <End Role="Cases" Type="Self.Cases" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="CaseJudges" Type="Self.CaseJudges" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cases">
+        <PropertyRef Name="CaseID" />
+      </Principal>
+      <Dependent Role="CaseJudges">
+        <PropertyRef Name="CaseID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_Cases_dbo_Plaintiffs_PlaintiffID">
+    <End Role="Plaintiffs" Type="Self.Plaintiffs" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Cases" Type="Self.Cases" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Plaintiffs">
+        <PropertyRef Name="PlaintiffID" />
+      </Principal>
+      <Dependent Role="Cases">
+        <PropertyRef Name="PlaintiffID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_CaseShedules_dbo_Cases_CaseID">
+    <End Role="Cases" Type="Self.Cases" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="CaseShedules" Type="Self.CaseShedules" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cases">
+        <PropertyRef Name="CaseID" />
+      </Principal>
+      <Dependent Role="CaseShedules">
+        <PropertyRef Name="CaseID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_Finances_dbo_Cases_CaseID">
+    <End Role="Cases" Type="Self.Cases" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Finances" Type="Self.Finances" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Cases">
+        <PropertyRef Name="CaseID" />
+      </Principal>
+      <Dependent Role="Finances">
+        <PropertyRef Name="CaseID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_dbo_Roles_dbo_Users_UserID">
+    <End Role="Users" Type="Self.Users" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Roles" Type="Self.Roles" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="Roles">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="CourtCaseApiContextModelStoreContainer">
+    <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Anouncements" EntityType="Self.Anouncements" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CaseFiles" EntityType="Self.CaseFiles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CaseJudges" EntityType="Self.CaseJudges" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Cases" EntityType="Self.Cases" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CaseShedules" EntityType="Self.CaseShedules" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Finances" EntityType="Self.Finances" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Plaintiffs" EntityType="Self.Plaintiffs" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_dbo_CaseFiles_dbo_Cases_CaseID" Association="Self.FK_dbo_CaseFiles_dbo_Cases_CaseID">
+      <End Role="Cases" EntitySet="Cases" />
+      <End Role="CaseFiles" EntitySet="CaseFiles" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_CaseJudges_dbo_Cases_CaseID" Association="Self.FK_dbo_CaseJudges_dbo_Cases_CaseID">
+      <End Role="Cases" EntitySet="Cases" />
+      <End Role="CaseJudges" EntitySet="CaseJudges" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_Cases_dbo_Plaintiffs_PlaintiffID" Association="Self.FK_dbo_Cases_dbo_Plaintiffs_PlaintiffID">
+      <End Role="Plaintiffs" EntitySet="Plaintiffs" />
+      <End Role="Cases" EntitySet="Cases" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_CaseShedules_dbo_Cases_CaseID" Association="Self.FK_dbo_CaseShedules_dbo_Cases_CaseID">
+      <End Role="Cases" EntitySet="Cases" />
+      <End Role="CaseShedules" EntitySet="CaseShedules" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_Finances_dbo_Cases_CaseID" Association="Self.FK_dbo_Finances_dbo_Cases_CaseID">
+      <End Role="Cases" EntitySet="Cases" />
+      <End Role="Finances" EntitySet="Finances" />
+    </AssociationSet>
+    <AssociationSet Name="FK_dbo_Roles_dbo_Users_UserID" Association="Self.FK_dbo_Roles_dbo_Users_UserID">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Roles" EntitySet="Roles" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

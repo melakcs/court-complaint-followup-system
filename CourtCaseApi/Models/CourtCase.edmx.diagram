@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d7a54a513a84462da506bc3b5a97a2d4" Name="Diagram1">
+        <EntityTypeShape EntityType="CourtCaseApiContextModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CourtCaseApiContextModel.Anouncement" Width="1.5" PointX="7.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CourtCaseApiContextModel.CaseFile" Width="1.5" PointX="5.25" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CourtCaseApiContextModel.CaseJudge" Width="1.5" PointX="5.25" PointY="4.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CourtCaseApiContextModel.Case" Width="1.5" PointX="3" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CourtCaseApiContextModel.CaseShedule" Width="1.5" PointX="5.25" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CourtCaseApiContextModel.Finance" Width="1.5" PointX="5.25" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CourtCaseApiContextModel.Plaintiff" Width="1.5" PointX="0.75" PointY="4.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CourtCaseApiContextModel.Role" Width="1.5" PointX="10" PointY="0.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CourtCaseApiContextModel.User" Width="1.5" PointX="7.75" PointY="0.875" IsExpanded="true" />
+        <AssociationConnector Association="CourtCaseApiContextModel.FK_dbo_CaseFiles_dbo_Cases_CaseID" ManuallyRouted="false" />
+        <AssociationConnector Association="CourtCaseApiContextModel.FK_dbo_CaseJudges_dbo_Cases_CaseID" ManuallyRouted="false" />
+        <AssociationConnector Association="CourtCaseApiContextModel.FK_dbo_Cases_dbo_Plaintiffs_PlaintiffID" ManuallyRouted="false" />
+        <AssociationConnector Association="CourtCaseApiContextModel.FK_dbo_CaseShedules_dbo_Cases_CaseID" ManuallyRouted="false" />
+        <AssociationConnector Association="CourtCaseApiContextModel.FK_dbo_Finances_dbo_Cases_CaseID" ManuallyRouted="false" />
+        <AssociationConnector Association="CourtCaseApiContextModel.FK_dbo_Roles_dbo_Users_UserID" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

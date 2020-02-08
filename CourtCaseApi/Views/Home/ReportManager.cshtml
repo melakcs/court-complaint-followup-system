@@ -1,0 +1,103 @@
+﻿@model IEnumerable<CourtCaseApi.ViewModels.ReportVM>
+@{
+    ViewBag.Title = "ReportManager";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Report Manager</h2>
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/jquery.wijmo-open.3.20172.118.css" rel="stylesheet" />
+<link href="~/Content/bootstrap.css" rel="stylesheet" />
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+    <meta name="viewport" content="width=device-width" />
+
+</head>
+
+<body>
+
+    <table style="width:600px;margin:0px auto;" class="form-horizontal" border="1">
+
+        <tr>
+
+            <th>
+
+                @Html.DisplayNameFor(model => model.PlaintiffID)
+
+            </th>
+            <th>
+
+                @Html.DisplayNameFor(model => model.CaseID)
+
+            </th>
+            <th>
+
+                @Html.DisplayNameFor(model => model.CaseRegDate)
+
+            </th>
+            <th>
+
+                @Html.DisplayNameFor(model => model.CaseType)
+
+            </th>
+            <th>
+
+                @Html.DisplayNameFor(model => model.JudgmentDate)
+
+            </th>
+            <th>
+
+                @Html.DisplayNameFor(model => model.CaseStatus)
+
+            </th>
+           
+
+        </tr>
+
+        @foreach (var item in Model)
+        {
+
+            <tr>
+
+                <td>
+
+                    @Html.DisplayFor(modelItem => item.PlaintiffID)
+
+                </td>
+
+                <td>
+
+                    @Html.DisplayFor(modelItem => item.CaseID)
+
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem=>item.CaseRegDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CaseType)
+                </td>
+                <td>
+
+                    @Html.DisplayFor(modelItem => item.JudgmentDate)
+
+                </td>
+                <td>
+
+                    @Html.DisplayFor(modelItem => item.CaseStatus)
+
+                </td>
+              
+
+            </tr>
+
+        }
+
+    </table>
+
+</body>
+
+</html>

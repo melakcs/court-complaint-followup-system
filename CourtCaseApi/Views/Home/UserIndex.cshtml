@@ -1,0 +1,212 @@
+﻿
+@{
+    ViewBag.Title = "UserIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/angular.min.js"></script>
+
+<script>
+    var app;
+    (function () {
+        'use strict'; //Defines that JavaScript code should be executed in "strict mode" */
+        app = angular.module('User', []);
+        app.controller('User', ['$scope', '$http',
+    function ($scope, $http) {
+        var baseUrl = 'http://localhost:1619/api/Users';
+        $scope.btnText = "Save";
+        //save and update function
+        $scope.SaveUpdate = function () {
+            var User = {
+
+                UserID: $scope.UserID,
+                UserName: $scope.UserName,
+                UserType: $scope.UserType,
+                Password: $scope.Password,
+               // Password: CryptoJS.SHA1($scope.Password),
+
+            }
+            if ($scope.btnText == "Save") {
+                $http.post(baseUrl, User).then(function (response) {
+                    if (response.data != "") {
+                        alert('Data Saved Successfully');
+                        $scope.Clear();
+                    }
+                    else {
+                        alert("Some error");
+                    }
+                },
+       function (error) {
+           console.log("There is error " + error);
+       });
+
+            }
+            else {
+                var apiRoute = baseUrl + '/' + UserID;
+                $http.put(apiRoute, User).then(function (response) {
+                    if (response.data != "") {
+                        alert("Data Updated Successfully");
+                        $scope.GetUsers();
+                        $scope.Clear();
+
+                    }
+                    else {
+                        alert("Some error");
+                    }
+
+                }, function (error) {
+                    console.log("Error: " + error);
+                });
+                //}
+
+            }
+        }
+
+        $scope.Clear = function () {
+            //$scope.PlaintiffID = 0;
+            $scope.UserID = "";
+            $scope.UserName = "";
+            $scope.UserType = "";
+            $scope.Password = "";
+
+        }
+        //Get all plaintiff
+        $scope.GetUsers = function () {
+            $http.get(baseUrl).then(function (response) {
+                debugger
+                $scope.Users = response.data;
+            },
+             function (error) {
+                 console.log("Error: " + error);
+             });
+        }
+        $scope.GetUsers();
+
+        //get by ID
+        $scope.GetUser = function (User) {
+            debugger
+            var apiRoute = baseUrl + '/' + User.UserID;
+            $http.get(apiRoute, User.UserID).then(function (response) {
+                $scope.UserID = response.data.UserID;
+                $scope.UserName = response.data.UserName;
+                $scope.UserType = response.data.UserType;
+                $scope.Password = response.data.Password;
+                $scope.btnText = "Update";
+
+            },
+            function (error) {
+                console.log("Error: " + error);
+            });
+        }
+
+        //delete function
+        $scope.DeleteUser = function (User) {
+            debugger
+            var apiRoute = baseUrl + '/' + User.UserID;
+            //if (confirm("sure to delete"))
+
+            $http.delete(apiRoute).then(function (response) {
+                if (response.data != "") {
+                    alert("Data Delete Successfully");
+                    $scope.GetUsers();
+                    $scope.Clear();
+
+                } else {
+                    alert("Some error");
+                }
+
+            }, function (error) {
+                console.log("Error: " + error);
+            });
+        }
+    }]);
+    })();
+</script>
+<h2>User</h2>
+<body ng-app="User">
+    <div ng-controller="User">
+        <form style="width:600px;margin:0px auto;" class="form-horizontal">
+            <div class=" form-horizontal">
+                <label for="UserID" class="control-label col-md-4" style="display:none">User ID:</label>
+                <div class="form-group row" style="display:none">
+                    <input type="text" class="form-control" id="UserID" data-ng-model="UserID" />
+                </div>
+            </div>
+            <div class=" form-horizontal">
+                <label for="UserName " class="control-label col-md-4">User Name :</label>
+                <div class="form-group row">
+                    <input type="text" class="form-control" id="UserName " data-ng-model="UserName " />
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <label for="UserType " class="control-label col-md-4">User Type :</label>
+                <div class="form-group row">
+                    <fieldset>
+                        <select type="text" class="form-control" id="UserType " data-ng-model="UserType " data-ng-required="true">
+                            <option value="">--Select User Type</option>
+                            <option value="LawOfficer">Law Officer</option>
+                            <option value="Judge">Judge</option>
+                            <option value="FilingClerk">Filing Clerk</option>
+                            <option value="FinanceOfficer">Finance Officer</option>
+                            <option value="Administrator">Administrator</option>
+                        </select>
+                    </fieldset>
+                </div>
+            </div>
+            <div class=" form-horizontal">
+                <label for="Password " class="control-label col-md-4" >Password :</label>
+                <div class="form-group row">
+                    <input type="text"  value="test@123" class="form-control" id="Password " data-ng-model="Password " />
+                </div>
+            </div>
+            <div class="form-horizontal">
+                <div class="col-md-4">
+                </div>
+                <div class="col-md-7">
+                    <button type="submit" class="btn btn-success margin-right-btn" ng-click="SaveUpdate()">
+                        <i class="icon-save"></i> {{btnText}}
+                    </button>
+                    <input type="reset" id="Clear" class="btn btn-success margin-right-btn" value="Reset" />
+                </div>
+            </div>
+            <br />
+        </form>
+        <table border="1" width="1000" style="border-right-color:antiquewhite" class="table">
+            <tr>
+            <thead>
+            <th>User ID</th>
+            <th>User Name</th>
+            <th>User Type</th>
+            <th>Password</th>
+            </thead>
+            </tr>
+            <tbody ng-repeat="User in Users">
+                <tr>
+                    <td>{{User.UserID}}</td>
+                    <td>{{User.UserName}}</td>
+                    <td>{{User.UserType }}</td>
+                    <td>{{User.Password }}</td>
+                    <td style="text-align:right; color:white">
+                        <span>
+                            <span id="save" class="btn btn-primary margin-right-btn" ng-click="GetUser(User)">
+                                Edit
+                            </span>
+                        </span>
+                    </td>
+                    <td style="text-align:right; color:white">
+                        <span>
+                            <span id="save" class="btn btn-danger margin-right-btn" ng-click="DeleteUser(User)">
+                                Delete
+                            </span>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+
+
+
+
+
